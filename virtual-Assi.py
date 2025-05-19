@@ -3,6 +3,7 @@ import pyttsx3
 import pywhatkit
 import datetime
 import wikipedia
+import requests
 
 # Initialize recognizer and text-to-speech engine
 listener = sr.Recognizer()
@@ -26,6 +27,20 @@ def input_instruction():
             return instruction
     except:
         return ""
+
+# Function to get weather info
+def get_weather():
+    city = "Colombo"  
+    api_key = "your_openweather_api_key"  
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+    response = requests.get(url)
+    data = response.json()
+    if data.get("main"):
+        temp = data["main"]["temp"]
+        desc = data["weather"][0]["description"]
+        talk(f"The current temperature in {city} is {temp} degrees Celsius with {desc}.")
+    else:
+        talk("Sorry, I couldn't fetch the weather details.")
 
 # Function to process and respond to instructions
 def play_Jarvis():
@@ -64,6 +79,9 @@ def play_Jarvis():
         info = wikipedia.summary(person, 1)
         print(info)
         talk(info)
+
+    elif 'weather' in instruction:
+        get_weather()
 
     else:
         talk("Please repeat the command.")
