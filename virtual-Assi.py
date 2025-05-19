@@ -11,7 +11,7 @@ machine = pyttsx3.init()
 # Function to make the assistant speak
 def talk(text):
     machine.say(text)
-    machine.runAndWait()  # Should be inside the function
+    machine.runAndWait()
 
 # Function to take voice input
 def input_instruction():
@@ -31,6 +31,14 @@ def input_instruction():
 def play_Jarvis():
     instruction = input_instruction()
     print(f"Instruction: {instruction}")
+
+    if instruction == "":
+        talk("Sorry, I didn't catch that. Please try again.")
+        return
+
+    if "hello" in instruction or "hi" in instruction:
+        talk("Hello! How can I help you today?")
+        return
 
     if "play" in instruction:
         song = instruction.replace('play', '')
